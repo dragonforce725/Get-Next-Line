@@ -6,30 +6,30 @@
 /*   By: jsantann <jsantann@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 08:54:50 by jsantann          #+#    #+#             */
-/*   Updated: 2022/07/16 08:40:37 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/16 09:04:19 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char *ft_read(int fd, char *line)
+static char	*ft_read(int fd, char *line)
 {
-	char    *buf;
-    int     rby;
-
-  	buf = malloc(BUFFER_SIZE + 1 * sizeof(char));
-    if (!buf)
+	char	*buf;
+    int		rby;
+	
+	buf = malloc(BUFFER_SIZE + 1 * sizeof(char));
+	if (!buf)
 		return (NULL);
 	rby = 1;
-    while (!ft_strchr(line, '\n') && rby != 0)
-    {
+	while (!ft_strchr(line, '\n') && rby != 0)
+	{
 		rby = read(fd, buf, BUFFER_SIZE);
-        if (rby < 0)
-            break ;
-        buf[rby] = '\0';
-        line = ft_strjoin(line, buf);
-    }
-    free(buf);
+		if (rby < 0)
+			break ;
+		buf[rby] = '\0';
+		line = ft_strjoin(line, buf);
+	}
+    free (buf);
     if (rby < 0)
 		return (NULL);
 	else
