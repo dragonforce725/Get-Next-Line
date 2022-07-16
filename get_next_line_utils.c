@@ -6,7 +6,7 @@
 /*   By: jsantann <jsantann@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 11:39:30 by jsantann          #+#    #+#             */
-/*   Updated: 2022/07/14 19:09:28 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/16 07:00:54 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,48 @@ char	*ft_strchr(const char *s, int c)
 			i++;
 	}
 	return (0);
+}
+
+char	*ft_strdup(const char *s)
+{
+	size_t	size;
+	size_t	i;
+	char	*cp_str;
+
+	i = 0;
+	while(s[i])
+		i++;
+	size = (i + 1);
+	cp_str = (char *)malloc(size * sizeof(char));
+	if (!cp_str)
+		return (NULL);
+	i = 0;
+	while(i < size)
+	{
+		cp_str[i] = s[i];
+		i++;
+	}
+	return (cp_str);
+}
+
+size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	len = 0;
+	while(src[len])
+		len++;
+	if(!size)
+		return (len);
+	while(i < (size - 1) && i < len && src[i])
+	{
+		dest[i] = src;
+		i++;
+	}
+	dest[i] = '\0';
+	return (len);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)

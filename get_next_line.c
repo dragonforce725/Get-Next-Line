@@ -6,94 +6,92 @@
 /*   By: jsantann <jsantann@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 08:54:50 by jsantann          #+#    #+#             */
-/*   Updated: 2022/07/14 19:12:52 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/16 07:55:24 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-ssize_t read(int fd, void *buf, size_t count);
-
-static char *fd_first_read(int fd, char *line)
+static char *ft_read(int fd, char *line)
 {
-	char    *alloc;
-    int     b;
+	char    *buf;
+    int     rby;
 
-  	alloc = malloc(BUFFER_SIZE + 1 * sizeof(char));
-    b = 1;
-    while (!ft_strchr(line, '\n') && b != 0)
+  	buf = malloc(BUFFER_SIZE + 1 * sizeof(char));
+    if (!buf)
+		return (NULL);
+	rby = 1;
+    while (!ft_strchr(line, '\n') && rby != 0)
     {
-		b = read(fd, alloc, BUFFER_SIZE);
-        if (b == -1)
-        {
-            free(alloc);
-            return (NULL);
-        }
-        alloc[b] = '\0';
-        line = ft_strjoin(line, alloc);
+		rby = read(fd, buf, BUFFER_SIZE);
+        if (rby < 0)
+            break ;
+        buf[rby] = '\0';
+        line = ft_strjoin(line, buf);
     }
-    free(alloc);
-    return (line);
+    free(buf);
+    if (rby < 0)
+		return (NULL);
+	else
+		return (line);
 }
 
-static char *fd_read_line(char *line)
+static char *ft_read_line(char *line)
 {
-	char    *alloc2;
-    int     count;
+	char	*alloc;
+    size_t	count;
 
 	count = 0;
-    if (!line[count])
+    if (!line)
 		return (NULL);
     while (line[count] && line[count] != '\n')
          count++;
-    alloc2 = malloc((count + 2) * sizeof(char));
-    count = 0;
-    while (line[count] && line[count] != '\n')
-    {
-        alloc2[count] = line[count];
-        count++;
-    }
+    alloc = (char *)malloc((count + 2) * sizeof(char));
+    if (!line)
+		return (NULL);
+	ft_strlcpy(alloc, line, count + 1);
     if (line[count] == '\n')
-        alloc2[count++] = '\n';
-    alloc2[count] = '\0';
-    return (alloc2);
+        alloc[count++] = '\n';
+    alloc[count] = '\0';
+    return (alloc);
 }
 
-static char *fd_save_rest(char *line)
+static char *ft_save_rest(char *line)
 {
-	char    *alloc3;
-    int     count;
-    int     count2;
+	char    *new_line;
+    int     i;
+    int     j;
 
-    count = 0;
-    count2 = 0;
-    while (line[count] && line[count] != '\n')
-        count++;
-    if (!line[count])
+    i = 0;
+    j = 0;
+    while (line[i] && line[i] != '\n')
+		i++;
+    if (!line[i])
     {
         free(line);
         return (NULL);
     }
-    alloc3 = malloc((ft_strlen(line) - count + 1) * sizeof(char));
-    if (!alloc3)
+    new_line = (char *)malloc((ft_strlen(line) - i + 1) * sizeof(char));
+    if (!new_line)
         return (NULL);
-    count++;
-    while (line[count])
-        alloc3[count2++] = line[count++];
-    alloc3[count2] = '\0';
+    i++;
+    while (line[i])
+        new_line[j++] = line[i++];
+    new_line[j] = '\0';
     free(line);
-    return (alloc3);
+    return (new_line);
 }
 char	*get_next_line(int fd)
 {
-	char static	*file;
+	static char	*file;
     char		*line;
+
 	if (fd < 0 || BUFFER_SIZE <= 0)
-        return (0);
-    file = fd_first_read(fd, file);
+        return (NULL);
+    file = ft_read(fd, file);
     if (!file)
         return (NULL);
-    line = fd_read_line(file);
-    file = fd_save_rest(file);
+    line = ft_read_line(file);
+    file = ft_save(file);
     return (line);
 }
