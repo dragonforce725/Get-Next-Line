@@ -3,110 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jsantann <jsantann@student.42.rio>         +#+  +:+       +#+        */
+/*   By: mhenriqu <marcos.henrique.com.br725@gmail  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/14 11:39:30 by jsantann          #+#    #+#             */
-/*   Updated: 2022/07/16 08:53:54 by mhenriqu         ###   ########.fr       */
+/*   Created: 2022/07/27 14:00:28 by mhenriqu          #+#    #+#             */
+/*   Updated: 2022/07/27 20:22:42 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *c)
+int	found_newline(t_list *stash)
 {
-	size_t	a;
+	int		i;
+	t_list	*current;
 
-	a = 0;
-	while (*c)
-	{
-		a++;
-		c++;
-	}
-	return (a);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	size_t	i;
-
+	if (stash == NULL)
+		return(0);
+	current = ft_lst_get_last(stash);
 	i = 0;
-	while (i <= ft_strlen(s))
+	while(current ->content[i])
 	{
-		if (s[i] == (unsigned char)(c))
-			return ((char *)s + i);
-		else
-			i++;
+		if(currente->content[i] == '\n')
+			return (1);
+		i++
 	}
 	return (0);
 }
 
-char	*ft_strdup(const char *s)
+t_list	*ft_lst_get_last()
 {
-	size_t	size;
-	size_t	i;
-	char	*cp_str;
+	t_list	*current;
 
-	i = 0;
-	while (s[i])
-		i++;
-	size = (i + 1);
-	cp_str = (char *)malloc(size * sizeof(char));
-	if (!cp_str)
-		return (NULL);
-	i = 0;
-	while (i < size)
-	{
-		cp_str[i] = s[i];
-		i++;
-	}
-	return (cp_str);
+	current = stash;
+	while(current && current->next)
+		current = current->next;
+	return (current);
 }
 
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
+void	generate_line( char **line, t_list *stash)
 {
-	size_t	i;
-	size_t	len;
+	int i;
+	int len;
 
-	i = 0;
 	len = 0;
-	while (src[len])
-		len++;
-	if (!size)
-		return (len);
-	while (i < (size - 1) && i < len && src[i])
+	while(stash)
 	{
-		dest[i] = src;
-		i++;
+		i = 0;
+		while (stash->content[i])
+		{
+			if (stash->content ='\n')
+			{
+				len++;
+				break;
+			}
+			len++;
+			i++;
+		}
+		stash = stash->next;
 	}
-	dest[i] = '\0';
-	return (len);
+	*line = malloc(sizeof(char) * (len + 1));
+	if (*line == NULL)
+		return;
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+void	free_stash(t_list *stash)
 {
-	char			*n;
-	unsigned int	j;
-	unsigned int	i;
-	size_t			totallen;
+	t_list	*current;
+	t_list	*next;
 
-	if (!s1 || !s2)
-		return (NULL);
-	totallen = ft_strlen(s1) + ft_strlen(s2) + 1;
-	n = malloc(totallen);
-	i = 0;
-	j = 0;
-	if (n == NULL)
-		return (NULL);
-	while (s1[i] != '\0')
+	current = stash;
+	while(current)
 	{
-		n[i] = s1[i];
+		free(current->content);
+		next = current->next;
+		free(current);
+		current = next;
+	}
+
+}
+
+size_t	ft_strlen(const char *str)
+{
+	size_t len;
+
+	len = 0;
+	while(s[i] != '\0')
 		i++;
-	}
-	while (s2[j] != '\0')
-	{
-		n[i + j] = s2[j];
-		j++;
-	}
-	n[i + j] = '\0';
-	return (n);
+	return(i);
 }
