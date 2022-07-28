@@ -6,7 +6,7 @@
 /*   By: mhenriqu <marcos.henrique.com.br725@gmail  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 14:00:28 by mhenriqu          #+#    #+#             */
-/*   Updated: 2022/07/27 20:22:42 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/28 16:41:12 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,43 +18,43 @@ int	found_newline(t_list *stash)
 	t_list	*current;
 
 	if (stash == NULL)
-		return(0);
+		return (0);
 	current = ft_lst_get_last(stash);
 	i = 0;
-	while(current ->content[i])
+	while (current->content[i])
 	{
-		if(currente->content[i] == '\n')
+		if (currente->content[i] == '\n')
 			return (1);
-		i++
+		i++;
 	}
 	return (0);
 }
 
-t_list	*ft_lst_get_last()
+t_list	*ft_lst_get_last(t_list *stash)
 {
 	t_list	*current;
 
 	current = stash;
-	while(current && current->next)
+	while (current && current->next)
 		current = current->next;
 	return (current);
 }
 
 void	generate_line( char **line, t_list *stash)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	len = 0;
-	while(stash)
+	while (stash)
 	{
 		i = 0;
 		while (stash->content[i])
 		{
-			if (stash->content ='\n')
+			if (stash->content == '\n')
 			{
 				len++;
-				break;
+				break ;
 			}
 			len++;
 			i++;
@@ -63,7 +63,7 @@ void	generate_line( char **line, t_list *stash)
 	}
 	*line = malloc(sizeof(char) * (len + 1));
 	if (*line == NULL)
-		return;
+		return ;
 }
 
 void	free_stash(t_list *stash)
@@ -72,22 +72,21 @@ void	free_stash(t_list *stash)
 	t_list	*next;
 
 	current = stash;
-	while(current)
+	while (current)
 	{
 		free(current->content);
 		next = current->next;
 		free(current);
 		current = next;
 	}
-
 }
 
 size_t	ft_strlen(const char *str)
 {
-	size_t len;
+	size_t	len;
 
 	len = 0;
-	while(s[i] != '\0')
+	while (s[i] != '\0')
 		i++;
-	return(i);
+	return (i);
 }

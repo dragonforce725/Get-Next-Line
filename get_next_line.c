@@ -6,7 +6,7 @@
 /*   By: jsantann <jsantann@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 08:54:50 by jsantann          #+#    #+#             */
-/*   Updated: 2022/07/27 20:18:50 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/28 15:18:44 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,46 +15,43 @@
 char	*get_next_line(int fd)
 {
 	static t_list	*stash;
-    char			*line;
-	int				 readed;
+	char			*line;
+	int				readed;
 
 	stash = NULL;
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
-        return (NULL);
+		return (NULL);
 	readed = 1;
 	line = NULL;
-	
 	read_and_stash(fd, &stash, &readed);
 	if (stash == NULL)
 		return (NULL);
-
 	extract_line(stash, &line);
-
 	clean_stash(&stash);
-	if(line[0] == '\0')
+	if (line[0] == '\0')
 	{
 		free_stash(stash);
 		stash = NULL;
 		free(line);
 		return (NULL);
 	}
-	return (line);    
+	return (line);
 }
 
 void	read_and_stash(int fd, t_list **stash, int *readed_ptr)
 {
 	char	*buf;
 
-	while(!found_newline(*stash) && *readed_ptr != 0)
+	while (!found_newline(*stash) && *readed_ptr != 0)
 	{
 		buf = malloc(sizeof(char) * (BUFFER_SIZE + 1));
 		if (buf == NULL)
-          return;
+			return ;
 		*readed_ptr = read(fd, buf, BUFFER_SIZE);
-		if((*stash == NULL && *readed_ptr == 0) || *readed_ptr == -1)
+		if ((*stash == NULL && *readed_ptr == 0) || *readed_ptr == -1)
 		{
 			free(buf);
-			return;
+			return ;
 		}
 		buf[*readed_ptr] = '\0';
 		add_to_stash(stash, buf, *readed_ptr);
@@ -69,48 +66,47 @@ void	add_to_stash(t_list **stash, char *buf, int readed)
 	t_list	*new_node;
 
 	new_node = malloc(sizeof(t_list));
-	if(new_node == NULL)
-		return;
-	new_node->next =NULL;
-	new_node->content = malloc(sizeof(char) * (readed_ptr + 1)); 
-
-	if(new_node->content == NULL)
-		return;
+	if (new_node == NULL)
+		return ;
+	new_node->next = NULL;
+	new_node->content = malloc(sizeof(char) * (readed_ptr + 1));
+	if (new_node->content == NULL)
+		return ;
 	i = 0;
-	while(buf[i] && i < readed)
+	while (buf[i] && i < readed)
 	{
 		new_node->content[i] = buf[i];
 		i++;
 	}
-	new_node->content[i] ='\0';
+	new_node->content[i] = '\0';
 	if (*stash == NULL)
 	{
 		*stash = new_node;
-		return;
+		return ;
 	}
 	last = ft_lst_get_last(*stash);
 	last->next = new_node;
 }
 
-void	extract_line(t_list stash, char **line)
+void	extract_line(t_list *stash, char **line)
 {
 	int	i;
 	int	j;
 
-	if(stash ==	NULL)
-		return;
+	if (stash == NULL)
+		return ;
 	generate_line(line, stash);
 	if (*line == NULL)
-		return;
-	while(stash)
+		return ;
+	while (stash)
 	{
 		i = 0;
-		while(stash->content[i])
+		while (stash->content[i])
 		{
-			if(stash->content[i] == '\n')
+			if (stash->content[i] == '\n')
 			{
 				(*line)[j++] = stash->content[i];
-				break;
+				break ;
 			}
 			(*line)[j++] = stash->content[i++];
 		}
@@ -119,29 +115,30 @@ void	extract_line(t_list stash, char **line)
 	(*line)[j] = '\0';
 }
 
-void	clean_stash()
+void	clean_stash(t_list **staqsh)
 {
-	t_list	*list;
+	t_list	*last;
 	t_list	*clear_node;
 	int		i;
 	int		j;
 
 	clean_node = malloc (sizeof(t_list));
-	if(stash == NULL || clean_node == NULL)
-		return;
+	if (stash == NULL || clean_node == NULL)
+		return ;
 	clean_node->next = NULL;
 	last = ft_lst_get_last(*stash);
-	i=0;
+	i = 0;
 	while (last->content[i] && last->content[i] != '\n')
 		i++;
-	if(last->content && last->content[i] ='\n')
-		i++
-			clean_node->content = malloc(sizeof(char) * ((ft_strlen(last->content) - i) + 1));
-	if(clean_code->content == NULL)
-		return;
+	if (last->content && last->content[i] == '\n')
+		i++;
+			clean_node->content = malloc(sizeof(char)
+			* ((ft_strlen(last->content) - i) + 1));
+	if (clean_code->content == NULL)
+		return ;
 	j = 0;
-	while(last->content[i])
-		clean_node->content[j--] = last ->content[i++];
+	while (last->content[i])
+		clean_node->content[j--] = last->content[i++];
 	clean_node->content[j] = '\0';
 	free_stash(*stash);
 	*stash = clean_node;
