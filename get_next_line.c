@@ -6,7 +6,7 @@
 /*   By: jsantann <jsantann@student.42.rio>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/14 08:54:50 by jsantann          #+#    #+#             */
-/*   Updated: 2022/07/28 15:18:44 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/29 16:59:46 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	add_to_stash(t_list **stash, char *buf, int readed)
 	if (new_node == NULL)
 		return ;
 	new_node->next = NULL;
-	new_node->content = malloc(sizeof(char) * (readed_ptr + 1));
+	new_node->content = malloc(sizeof(char) * (readed + 1));
 	if (new_node->content == NULL)
 		return ;
 	i = 0;
@@ -101,6 +101,7 @@ void	extract_line(t_list *stash, char **line)
 	while (stash)
 	{
 		i = 0;
+		j = 0;
 		while (stash->content[i])
 		{
 			if (stash->content[i] == '\n')
@@ -115,10 +116,10 @@ void	extract_line(t_list *stash, char **line)
 	(*line)[j] = '\0';
 }
 
-void	clean_stash(t_list **staqsh)
+void	clean_stash(t_list **stash)
 {
 	t_list	*last;
-	t_list	*clear_node;
+	t_list	*clean_node;
 	int		i;
 	int		j;
 
@@ -134,7 +135,7 @@ void	clean_stash(t_list **staqsh)
 		i++;
 			clean_node->content = malloc(sizeof(char)
 			* ((ft_strlen(last->content) - i) + 1));
-	if (clean_code->content == NULL)
+	if (clean_node->content == NULL)
 		return ;
 	j = 0;
 	while (last->content[i])

@@ -6,7 +6,7 @@
 /*   By: mhenriqu <marcos.henrique.com.br725@gmail  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/27 14:00:28 by mhenriqu          #+#    #+#             */
-/*   Updated: 2022/07/28 16:41:12 by mhenriqu         ###   ########.fr       */
+/*   Updated: 2022/07/29 16:52:13 by mhenriqu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	found_newline(t_list *stash)
 	i = 0;
 	while (current->content[i])
 	{
-		if (currente->content[i] == '\n')
+		if (current->content[i] == '\n')
 			return (1);
 		i++;
 	}
@@ -51,7 +51,7 @@ void	generate_line( char **line, t_list *stash)
 		i = 0;
 		while (stash->content[i])
 		{
-			if (stash->content == '\n')
+			if (stash->content[i] == '\n')
 			{
 				len++;
 				break ;
@@ -86,7 +86,7 @@ size_t	ft_strlen(const char *str)
 	size_t	len;
 
 	len = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	while (str[len] != '\0')
+		len++;
+	return (len);
 }
